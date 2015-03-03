@@ -56,6 +56,27 @@ module bgp {
   }
 
 
+  typedef bgp-origin-attr-type {
+    type enumeration {
+      enum IGP {
+        value 0;
+        description "Origin of the NLRI is internal";
+      }
+      enum EGP {
+        value 1;
+        description "Origin of the NLRI is EGP";
+      }
+      enum INCOMPLETE {
+        value 2;
+        description "Origin of the NLRI is neither IGP or EGP";
+      }
+    }
+    description
+      "Type definition for standard BGP origin attribute";
+    reference "RFC 4271 - A Border Gateway Protocol 4 (BGP-4),
+      Sec 4.3";
+  }
+
   typedef peer-type {
     type enumeration {
       enum INTERNAL {
