@@ -402,6 +402,18 @@ module bgp {
       }
     }
 
+    container route-server {
+      description
+        "Configure the local router as a route server";
+
+      leaf route-server-client {
+        type boolean;
+        default "false";
+        description
+          "Configure the neighbor as a route server client.";
+      }
+    }
+
     leaf remove-private-as {
       // could also make this a container with a flag to enable
       // remove-private and separate option.  here, option implies
