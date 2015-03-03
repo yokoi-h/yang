@@ -99,10 +99,144 @@ module bgp-operational {
       "top level container for operational state data";
 
     container bgp-neighbor-common-state {
-      config false;
       description
         "data definitions for operational state variables related
         to BGP neighbor sesions";
+
+      leaf state {
+        type uint32;
+        description
+          "BGP FSM state";
+      }
+
+      leaf uptime {
+        type int64;
+        description
+          "The number of seconds elasped since January 1, 1970 UTC
+          when the BGP session became established state";
+      }
+
+      leaf downtime {
+        type int64;
+        description
+          "The number of seconds elasped since January 1, 1970 UTC
+          when the BGP session became non established state";
+      }
+
+      leaf open-in {
+        type uint32;
+        description
+          "The number of received OPEN messages";
+      }
+
+      leaf open-out {
+        type uint32;
+        description
+          "The number of sent OPEN messages";
+      }
+
+      leaf update-in {
+        type uint32;
+        description
+          "The number of received UPDATE messages";
+      }
+
+      leaf update-out {
+        type uint32;
+        description
+          "The number of sent UPDATE messages";
+      }
+
+      leaf update-recv-time {
+        type int64;
+        description
+          "The number of seconds elasped since January 1, 1970 UTC
+          last time the BGP session received an UPDATE message";
+      }
+
+      leaf keepalive-in {
+        type uint32;
+        description
+          "The number of received KEEPALIVE messages";
+      }
+
+      leaf keepalive-out {
+        type uint32;
+        description
+          "The number of sent KEEPALIVE messages";
+      }
+
+      leaf notify-in {
+        type uint32;
+        description
+          "The number of received NOTIFICATION messages";
+      }
+
+      leaf notify-out {
+        type uint32;
+        description
+          "The number of sent NOTIFICATION messages";
+      }
+
+      leaf refresh-in {
+        type uint32;
+        description
+          "The number of received ROUTE_REFRESH messages";
+      }
+
+      leaf refresh-out {
+        type uint32;
+        description
+          "The number of sent ROUTE_REFRESH messages";
+      }
+
+      leaf dynamic-cap-in {
+        type uint32;
+        description
+          "The number of received DYNAMIC_CAP messages";
+      }
+
+      leaf dynamic-cap-out {
+        type uint32;
+        description
+          "The number of sent DYNAMIC_CAP messages";
+      }
+
+      leaf discarded-in {
+        type uint32;
+        description
+          "The number of discarded received messages";
+      }
+
+      leaf discarded-out {
+        type uint32;
+        description
+          "The number of discarded sent messages";
+      }
+
+      leaf total-in {
+        type uint32;
+        description
+          "The number of total received messages";
+      }
+
+      leaf total-out {
+        type uint32;
+        description
+          "The number of total sent messages";
+      }
+
+      leaf established-count {
+        type uint32;
+        description
+          "The number of how many the peer became established state";
+      }
+
+      leaf flops {
+        type uint32;
+        description
+          "The number of flip-flops";
+      }
     }
   }
 
