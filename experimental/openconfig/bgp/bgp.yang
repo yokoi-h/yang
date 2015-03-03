@@ -298,6 +298,16 @@ module bgp {
           "RFC 4271 - A Border Gateway Protocol 4, Sec. 10";
       }
 
+      leaf idle-hold-time-after-reset {
+        type decimal64 {
+          fraction-digits 2;
+        }
+        default 30;
+        description
+          "Time interval in seconds that a BGP session will be
+          in idle state after neighbor reset operation.";
+      }
+
       leaf keepalive-interval {
         type decimal64 {
           fraction-digits 2;
