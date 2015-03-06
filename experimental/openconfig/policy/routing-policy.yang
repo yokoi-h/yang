@@ -208,7 +208,7 @@ module routing-policy {
             reference the set in match conditions";
       }
 
-      list neighbor {
+      list neighbor-info {
         key "address";
         description
             "list of addresses that are part of the neighor set";
