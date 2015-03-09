@@ -779,7 +779,7 @@ module bgp-multiprotocol {
 
     uses global-individual-afi-safi-configuration-group;
 
-    list afi-safi {
+    list global-afi-safi {
       key "afi-safi-name";
 
       description
