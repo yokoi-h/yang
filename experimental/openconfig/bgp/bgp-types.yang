@@ -267,12 +267,15 @@ module bgp-types {
   typedef bgp-origin-attr-type {
     type enumeration {
       enum IGP {
+        value 0;
         description "Origin of the NLRI is internal";
       }
       enum EGP {
+        value 1;
         description "Origin of the NLRI is EGP";
       }
       enum INCOMPLETE {
+        value 2;
         description "Origin of the NLRI is neither IGP or EGP";
       }
     }

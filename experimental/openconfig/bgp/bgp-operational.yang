@@ -62,6 +62,48 @@ module bgp-operational {
         "Number of BGP NOTIFICATION messages indicating an
         error condition has occurred exchanged.";
     }
+
+    leaf OPEN {
+      type uint64;
+      description
+        "Number of BGP open messages announcing, withdrawing
+        or modifying paths exchanged.";
+    }
+
+    leaf REFRESH {
+      type uint64;
+      description
+        "Number of BGP Route-Refresh messages indicating an
+        error condition has occurred exchanged.";
+    }
+
+    leaf KEEPALIVE {
+      type uint64;
+      description
+        "Number of BGP Keepalive messages indicating an
+        error condition has occurred exchanged.";
+    }
+
+    leaf DYNAMIC-CAP {
+      type uint64;
+      description
+        "Number of BGP dynamic-cap messages indicating an
+        error condition has occurred exchanged.";
+    }
+
+    leaf DISCARDED {
+      type uint64;
+      description
+        "Number of discarded messages indicating an
+        error condition has occurred exchanged.";
+    }
+
+    leaf TOTAL {
+      type uint64;
+      description
+        "Number of total messages indicating an
+        error condition has occurred exchanged.";
+    }
   }
 
 
@@ -153,6 +195,18 @@ module bgp-operational {
       }
       description
         "BGP capabilities negotiated as supported with the peer";
+    }
+
+    leaf established-count {
+      type uint32;
+      description
+        "The number of how many the peer became established state";
+    }
+
+     leaf flops {
+      type uint32;
+      description
+        "The number of flip-flops";
     }
   }
 

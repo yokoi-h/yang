@@ -229,6 +229,16 @@ module bgp {
         hold-time.";
     }
 
+    leaf idle-hold-time-after-reset {
+      type decimal64 {
+        fraction-digits 2;
+      }
+      default 30;
+      description
+        "Time interval in seconds that a BGP session will be
+        in idle state after neighbor reset operation.";
+    }
+
     leaf minimum-advertisement-interval {
       type decimal64 {
         fraction-digits 2;
@@ -734,6 +744,18 @@ module bgp {
           "State information relating to route reflection for the
           BGP neighbor or group";
         uses bgp-neighbor-route-reflector_config;
+      }
+    }
+
+    container route-server {
+      description
+        "Configure the local router as a route server";
+
+      leaf route-server-client {
+        type boolean;
+        default "false";
+        description
+          "Configure the neighbor as a route server client.";
       }
     }
 
