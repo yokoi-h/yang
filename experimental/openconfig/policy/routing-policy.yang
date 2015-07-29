@@ -546,7 +546,7 @@ module routing-policy {
         in the export policy chain is satisfied.";
     }
 
-    leaf-list distribute-policies {
+    leaf-list distribute-policy {
       type leafref {
         path "/rpol:routing-policy/rpol:policy-definitions/" +
             "rpol:policy-definition/rpol:name";

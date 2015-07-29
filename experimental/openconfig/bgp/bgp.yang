@@ -284,10 +284,7 @@ module bgp {
     }
 
     leaf local-address {
-      type union {
-        type inet:ip-address;
-        type string;
-      }
+      type inet:ip-address;
       //TODO:  the string should be converted to a leafref type
       //to point to an interface when YANG 1.1 is available with
       //leafrefs in union types.

@@ -340,6 +340,20 @@ module bgp-operational {
         state";
     }
 
+    leaf downtime {
+      type yang:timeticks;
+      description
+        "This timer determines the amount of time since the
+        BGP last transitioned out of the Established state";
+    }
+
+    leaf update-recv-time {
+      type int64;
+      description
+        "The number of seconds elasped since January 1, 1970 UTC
+        last time the BGP session received an UPDATE message";
+    }
+
     leaf negotiated-hold-time {
       type decimal64 {
         fraction-digits 2;
