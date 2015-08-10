@@ -1,0 +1,251 @@
+module bgp-gobgp {
+
+  yang-version "1";
+
+  // namespace
+  namespace "https://github.com/osrg/yang/bgp-gobgp";
+
+  prefix "gobgp";
+
+  // import some basic types
+  import bgp { prefix bgp; }
+  import routing-policy {prefix rpol; }
+  import bgp-policy {prefix bgp-pol; }
+  import ietf-inet-types { prefix inet; }
+
+  // meta
+  organization
+    "GoBGP";
+
+  contact
+    "GoBGP
+    gobgp@gobgp.com";
+
+  description
+    "This module contains data definitions for GoBGP-specific attributes.
+    It augments bgp modules with GoBGP-specific options.";
+
+  revision "2015-08-10" {
+    description
+      "Updated model to augment base bgp modules";
+    reference "TBD";
+  }
+
+
+  grouping gobgp-message-counter {
+    description
+      "Counters for all BGPMessage types";
+
+    leaf OPEN {
+      type uint64;
+      description
+        "Number of BGP open messages announcing, withdrawing
+        or modifying paths exchanged.";
+    }
+
+    leaf REFRESH {
+      type uint64;
+      description
+        "Number of BGP Route-Refresh messages indicating an
+        error condition has occurred exchanged.";
+    }
+
+    leaf KEEPALIVE {
+      type uint64;
+      description
+        "Number of BGP Keepalive messages indicating an
+        error condition has occurred exchanged.";
+    }
+
+    leaf DYNAMIC-CAP {
+      type uint64;
+      description
+        "Number of BGP dynamic-cap messages indicating an
+        error condition has occurred exchanged.";
+    }
+
+    leaf DISCARDED {
+      type uint64;
+      description
+        "Number of discarded messages indicating an
+        error condition has occurred exchanged.";
+    }
+
+    leaf TOTAL {
+      type uint64;
+      description
+        "Number of total messages indicating an
+        error condition has occurred exchanged.";
+    }
+  }
+
+
+  grouping gobgp-timer {
+    description "additional timer";
+
+    leaf idle-hold-time-after-reset {
+      type decimal64 {
+        fraction-digits 2;
+      }
+      default 30;
+      description
+        "Time interval in seconds that a BGP session will be
+        in idle state after neighbor reset operation.";
+    }
+
+  }
+
+
+  grouping gobgp-neighbor-additional-timer {
+    description "additional timer";
+
+    leaf downtime {
+      type yang:timeticks;
+      description
+        "This timer determines the amount of time since the
+        BGP last transitioned out of the Established state";
+    }
+
+    leaf update-recv-time {
+      type int64;
+      description
+        "The number of seconds elasped since January 1, 1970 UTC
+        last time the BGP session received an UPDATE message";
+    }
+  }
+
+
+  grouping gobgp-distribute-policy {
+    description
+      "additional policy";
+
+    leaf-list distribute-policy {
+      type leafref {
+        path "/rpol:routing-policy/rpol:policy-definitions/" +
+            "rpol:policy-definition/rpol:name";
+        //require-instance true;
+      }
+      description
+        "list of policy names in sequence to be applied on
+        sending a routing update in the current context, e.g.,
+        for the current other route server clients.";
+    }
+
+    leaf default-distribute-policy {
+      type rpol:default-policy-type;
+      default REJECT-ROUTE;
+      description
+        "explicitly set a default policy if no policy definition
+        in the distribute policy chain is satisfied.";
+    }
+  }
+
+
+  // augment statements
+  augment "/bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:state/bgp:messages/bgp:sent" {
+    description "counters";
+    uses gobgp-message-counter;
+  }
+
+  augment "/bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:state/bgp:messages/bgp:received" {
+    description "counters";
+    uses gobgp-message-counter;
+  }
+
+  augment "/bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:state" {
+    description "additional state elements";
+
+    leaf established-count {
+      type uint32;
+      description
+        "The number of how many the peer became established state";
+    }
+
+     leaf flops {
+      type uint32;
+      description
+        "The number of flip-flops";
+    }
+  }
+
+  augment "/rpol:routing-policy/rpol:policy-definitions/" +
+    "rpol:policy-definition/rpol:statements/rpol:statement/" +
+    "rpol:actions/bgp-pol:bgp-actions/bgp-pol:set-as-path-prepend" {
+    description "as number to be added";
+
+       leaf as {
+         type union {
+           type inet:as-number;
+           type string {
+             pattern "last-as";
+           }
+         }
+         description
+           "autonomous system number or 'last-as' which means
+           the leftmost as number in the AS-path to be prepended";
+       }
+  }
+
+  augment "/bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:timers/bgp:config" {
+    description "additional timer elements";
+    uses gobgp-timer;
+   }
+
+  augment "/bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:timers/bgp:state" {
+    description "additional timer elements";
+    uses gobgp-timer;
+    uses gobgp-neighbor-additional-timer;
+   }
+
+  augment "/bgp:bgp/bgp:neighbors/bgp:neighbor" {
+    container route-server {
+      description "route server setting";
+
+      leaf route-server-client {
+        type boolean;
+        default "false";
+        description
+          "Configure the neighbor as a route server client.";
+      }
+    }
+  }
+
+  augment "/bgp:bgp/bgp:peer-groups/bgp:peer-group" {
+    container route-server {
+      description "route server setting";
+
+      leaf route-server-client {
+        type boolean;
+        default "false";
+        description
+          "Configure the neighbor as a route server client.";
+      }
+    }
+  }
+
+  augment "/bgp:bgp/bgp:global/bgp:apply-policy/bgp:config" {
+    description "as number to be added";
+    uses gobgp-distribute-policy;
+
+  }
+
+  augment "/bgp:bgp/bgp:global/bgp:apply-policy/bgp:state" {
+    description "additional policy";
+    uses gobgp-distribute-policy;
+
+  }
+
+  augment "/bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:transport/bgp:config" {
+    description "as number to be added";
+    leaf local-ip-address {
+        type inet:ip-address;
+    }
+  }
+
+  augment "/bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:transport/bgp:state" {
+    description "as number to be added";
+    leaf local-ip-address {
+      type inet:ip-address;
+    }
+  }
+}
